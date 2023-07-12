@@ -1,0 +1,110 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 33,
+  "spacing": 4,
+  "exclusive": true,
+  "gtk-layer-shell": true,
+  "passthrough": false,
+  "fixed-center": true,
+  "modules-left": ["custom/logo", "wlr/workspaces", "hyprland/window"],
+  "modules-center": [],
+  "modules-right": [
+    "custom/weather",
+    "cpu",
+    "temperature",
+    "memory",
+    "network",
+    "pulseaudio",
+    "clock#date",
+    "clock",
+    "battery",
+    "tray",
+    "custom/power"
+  ],
+  "wlr/workspaces": {
+    "on-click": "activate",
+    "format": "{name}",
+    "all-outputs": true,
+    "disable-scroll": false,
+    "active-only": false
+  },
+  "tray": {
+    "spacing": 10
+  },
+  "clock": {
+    "tooltip": false,
+    "format": "  {:%H:%M}"
+  },
+  "clock#date": {
+    "format": "   {:%a %b %d}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+  "temperature": {
+    "format": "{temperatureC}°C "
+  },
+  "cpu": {
+    "format": " {usage}%",
+    "tooltip": true,
+    "interval": 1
+  },
+  "memory": {
+    "format": " {used:0.2f}G"
+  },
+  "network": {
+        "format-wifi": " {signalStrength}%",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "format-disconnected": "",
+        "on-click": "kitty -e nmtui",
+    "tooltip": false
+    },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "  muted",
+    "format-icons": {
+      "headphone": " ",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [" ", " ", " "]
+    },
+    "on-click": "pavucontrol"
+  },
+  "battery": {
+        "format-discharging": "{capacity}% {icon}",
+        "format-icons": ["", "", "", "", ""],
+        "format-charging": "{capacity}% ",
+        "format-plugged": "",
+        "format-full": "",
+        "interval": 30,
+        "states": {
+            "warning": 25,
+            "critical": 10
+        },
+        "tooltip": false
+  },
+  "custom/logo": {
+    "format": "",
+    "tooltip": false
+  },
+  "custom/sep": {
+    "format": "|",
+    "tooltip": false
+  },
+  "custom/weather": {
+        "format": "{}",
+        "format-alt": "{alt}: {}",
+        "format-alt-click": "click-right",
+        "interval": 1800,
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/weather.sh",
+        "exec-if": "ping wttr.in -c1"
+    },
+  "custom/power": {
+    "tooltip": false,
+    "on-click": "wlogout -p layer-shell &",
+    "format": " "
+  }
+}
