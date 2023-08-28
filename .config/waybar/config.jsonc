@@ -7,7 +7,11 @@
   "gtk-layer-shell": true,
   "passthrough": false,
   "fixed-center": true,
-  "modules-left": ["custom/logo", "wlr/workspaces", "hyprland/window"],
+  "modules-left": [
+    "custom/logo",
+    "wlr/workspaces",
+    "hyprland/window"
+  ],
   "modules-center": [],
   "modules-right": [
     "custom/weather",
@@ -52,12 +56,12 @@
     "format": " {used:0.2f}G"
   },
   "network": {
-        "format-wifi": " {signalStrength}%",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "format-disconnected": "",
-        "on-click": "kitty -e nmtui",
+    "format-wifi": " {signalStrength}%",
+    "format-ethernet": "{ipaddr}/{cidr} ",
+    "format-disconnected": "",
+    "on-click": "kitty -e nmtui",
     "tooltip": false
-    },
+  },
   "pulseaudio": {
     "format": "{icon} {volume}%",
     "format-muted": "  muted",
@@ -68,22 +72,32 @@
       "phone": "",
       "portable": "",
       "car": "",
-      "default": [" ", " ", " "]
+      "default": [
+        " ",
+        " ",
+        " "
+      ]
     },
     "on-click": "pavucontrol"
   },
   "battery": {
-        "format-discharging": "{capacity}% {icon}",
-        "format-icons": ["", "", "", "", ""],
-        "format-charging": "{capacity}% ",
-        "format-plugged": "",
-        "format-full": "",
-        "interval": 30,
-        "states": {
-            "warning": 25,
-            "critical": 10
-        },
-        "tooltip": false
+    "format-discharging": "{capacity}% {icon}",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "format-charging": "{capacity}% ",
+    "format-plugged": "",
+    "format-full": "",
+    "interval": 30,
+    "states": {
+      "warning": 25,
+      "critical": 10
+    },
+    "tooltip": false
   },
   "custom/logo": {
     "format": "",
@@ -94,14 +108,14 @@
     "tooltip": false
   },
   "custom/weather": {
-        "format": "{}",
-        "format-alt": "{alt}: {}",
-        "format-alt-click": "click-right",
-        "interval": 1800,
-        "return-type": "json",
-        "exec": "~/.config/waybar/modules/weather.sh",
-        "exec-if": "ping wttr.in -c1"
-    },
+    "return-type": "json",
+    "format": "{}",
+    "exec-if": "exit 0",
+    "exec": "$HOME/.config/waybar/modules/weather.sh waybar",
+    "signal": 9,
+    "on-click": "pkill -SIGRTMIN+9 waybar",
+    "interval": 1800
+  },
   "custom/power": {
     "tooltip": false,
     "on-click": "wlogout -p layer-shell &",

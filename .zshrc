@@ -26,6 +26,7 @@ zinit light romkatv/powerlevel10k
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+
 # 高亮
 zinit ice lucid wait='0' atinit='zpcompinit'
 zinit light zdharma/fast-syntax-highlighting
@@ -41,6 +42,9 @@ zinit light zsh-users/zsh-history-substring-search
 #fzf
 zinit ice lucid wait='0'
 zinit light Aloxaf/fzf-tab
+#vim mode
+zinit ice depth=1
+zinit light jeffreytse/zsh-vi-mode
 
 zinit snippet OMZ::lib/completion.zsh
 zinit snippet OMZ::lib/history.zsh

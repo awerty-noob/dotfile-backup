@@ -116,30 +116,39 @@ vim.inherit	= "text_default"
 xml.inherit	= "text_default"
 yaml.inherit	= "text_default"
 yml.inherit	= "text_default"
+tex.inherit = "text_default"
 
 # archive formats
 7z.app_list	= [
+  { command = "atool", args = [ "-x", "-D" ], confirm_exit = true},
 	{ command = "7z", args = [ "x" ], confirm_exit = true },
 	{ command = "file-roller", fork = true, silent = true } ]
 bz2.app_list	= [
+  { command = "atool", args = [ "-x", "-D" ], confirm_exit = true},
 	{ command = "tar", args = [ "-xvjf" ], confirm_exit = true },
 	{ command = "file-roller", fork = true, silent = true } ]
 gz.app_list	= [
+  { command = "atool", args = [ "-x", "-D" ], confirm_exit = true},
 	{ command = "tar", args = [ "-xvzf" ], confirm_exit = true },
 	{ command = "file-roller", fork = true, silent = true } ]
 tar.app_list	= [
+  { command = "atool", args = [ "-x", "-D" ], confirm_exit = true},
 	{ command = "tar", args = [ "-xvf" ], confirm_exit = true },
 	{ command = "file-roller", fork = true, silent = true } ]
 tgz.app_list	= [
+  { command = "atool", args = [ "-x", "-D" ], confirm_exit = true},
 	{ command = "tar", args = [ "-xvzf" ], confirm_exit = true },
 	{ command = "file-roller", fork = true, silent = true } ]
 rar.app_list	= [
+  { command = "atool", args = [ "-x", "-D" ], confirm_exit = true},
 	{ command = "unrar", args = [ "x" ], confirm_exit = true },
 	{ command = "file-roller", fork = true, silent = true } ]
 xz.app_list	= [
+  { command = "atool", args = [ "-x", "-D" ], confirm_exit = true},
 	{ command = "tar", args = [ "-xvJf" ], confirm_exit = true },
 	{ command = "file-roller", fork = true, silent = true } ]
 zip.app_list	= [
+  { command = "atool", args = [ "-x", "-D" ], confirm_exit = true},
 	{ command = "unzip", confirm_exit = true },
 	{ command = "file-roller", fork = true, silent = true } ]
 
@@ -174,11 +183,11 @@ kdenlive.app_list = [
 	{ command = "kdenlive", fork = true, silent = true }
 ]
 
-tex.app_list	= [
-	{ command = "micro" },
-	{ command = "gedit", fork = true, silent = true },
-	{ command = "bat", confirm_exit = true },
-	{ command = "pdflatex" } ]
+# tex.app_list	= [
+# 	{ command = "micro" },
+# 	{ command = "gedit", fork = true, silent = true },
+# 	{ command = "bat", confirm_exit = true },
+# 	{ command = "pdflatex" } ]
 
 torrent.app_list = [
 	{ command = "transmission-gtk" } ]

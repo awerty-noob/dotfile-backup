@@ -1,5 +1,4 @@
 [global]
-    monitor = 0
     follow = mouse
     indicate_hidden = yes
     shrink = no
@@ -31,6 +30,7 @@
     always_run_script = true
     corner_radius = 0
     force_xinerama = false
+    force_wayland = true
     mouse_left_click = do_action
     mouse_middle_click = close_all
     mouse_right_click = close_current

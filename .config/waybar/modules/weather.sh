@@ -1,77 +1,124 @@
 #!/bin/bash
+refresh() {
+    for _ in 1 2 3 4 5; do
+        if ping -q -c 1 -W 1 8.8.8.8 >/dev/null 2>&1; then
+            weather="$(curl -s https://wttr.in/Hangzhou?format=%x+%t)" && break
+        else
+            sleep 2s
+        fi
+    done
 
-cachedir=~/.cache/rbn
-cachefile=${0##*/}-$1
+    [ -z "$weather" ] && return
 
-if [ ! -d $cachedir ]; then
-    mkdir -p $cachedir
-fi
+    condition=${weather% *}
+    temperature=${weather##* }
+    temperature=${weather##*+}
 
-if [ ! -f $cachedir/$cachefile ]; then
-    touch $cachedir/$cachefile
-fi
+    if [ "${weather%;*}" = "Unknown location" ]; then
+        unset condition
+        unset temperature
+        condition="Invaild"
+        temperature="$condition"
+    fi
 
-# Save current IFS
-SAVEIFS=$IFS
-# Change IFS to new line.
-IFS=$'\n'
+    hour=$(date +%H)
+    night_yet() {
+        [ "$hour" -ge 19 ] && icon=$*
+        [ "$hour" -le 4 ] && icon=$*
+    }
 
-cacheage=$(($(date +%s) - $(stat -c '%Y' "$cachedir/$cachefile")))
-if [ $cacheage -gt 1740 ] || [ ! -s $cachedir/$cachefile ]; then
-    data=($(curl -s https://en.wttr.in/Hangzhou$1\?0qnT 2>&1))
-    echo ${data[0]} | cut -f1 -d, > $cachedir/$cachefile
-    echo ${data[1]} | sed -E 's/^.{16}//' >> $cachedir/$cachefile
-    echo ${data[2]} | sed -E 's/^.{16}//' >> $cachedir/$cachefile
-fi
+    case $condition in
+        "?") icon="" ;;
+        "mm") icon="" ;;
+        "=")
+            icon=""
+            night_yet ""
+            ;;
+        "///") icon="" ;;
+        "//") icon="" ;;
+        "**") icon="" ;;
+        "*/*") icon="" ;;
+        "/")
+            icon=""
+            night_yet ""
+            ;;
+        ".")
+            icon=""
+            night_yet ""
+            ;;
+        "x")
+            icon=""
+            night_yet ""
+            ;;
+        "x/")
+            icon=""
+            night_yet ""
+            ;;
+        "*")
+            icon=""
+            night_yet ""
+            ;;
+        "*/")
+            icon=""
+            night_yet ""
+            ;;
+        "m")
+            icon=""
+            night_yet ""
+            ;;
+        "o")
+            icon=""
+            night_yet ""
+            ;;
+        "/!/") icon="" ;;
+        "!/") icon="" ;;
+        "*!*")
+            icon=""
+            night_yet ""
+            ;;
+        "mmm") icon="" ;;
+        "Invaild") icon="" ;;
+    esac
+}
 
-weather=($(cat $cachedir/$cachefile))
-# Restore IFSClear IFS=$SAVEIFS
+xmobar() {
+    set -f
+    set -- $(xrdb -q | grep -E '*.color0:|*.color3:|*.color7:' | cut -f2 | tr '\n' ' ')
+    set +f
 
-temperature=$(echo ${weather[2]} | sed -E 's/([[:digit:]]+)\.\./\1 to /g' | sed -e 's/[ ]*$//g')
+    background=${1}:5
+    yellow=$2
+    white=$3
 
-# echo ${weather[1]##*,}
+    refresh
+    if [ -z "$weather" ]; then
+        echo ' Offline'
+    else
+        printf '<fc=%s,%s>%s</fc><fc=%s,%s> %s</fc>\n' \
+            "$yellow" "$background" "$icon" "$white" "$background" "$temperature"
+    fi
+}
 
-# https://fontawesome.com/icons?s=solid&c=weather
-case $(echo ${weather[1]##*,} | tr '[:upper:]' '[:lower:]') in
-"clear" | "sunny")
-    condition="󰖙"
-    ;;
-"partly cloudy")
-    condition=""
-    ;;
-"cloudy")
-    condition="󰖐"
-    ;;
-"overcast")
-    condition=""
-    ;;
-"mist" | "fog" | "freezing fog")
-    condition="󰖑"
-    ;;
-"patchy rain possible" | "patchy light drizzle" | "light drizzle" | "patchy light rain" | "light rain" | "light rain shower" | "rain")
-    condition=""
-    ;;
-"moderate rain at times" | "moderate rain" | "heavy rain at times" | "heavy rain" | "moderate or heavy rain shower" | "torrential rain shower" | "rain shower")
-    condition=""
-    ;;
-"patchy snow possible" | "patchy sleet possible" | "patchy freezing drizzle possible" | "freezing drizzle" | "heavy freezing drizzle" | "light freezing rain" | "moderate or heavy freezing rain" | "light sleet" | "ice pellets" | "light sleet showers" | "moderate or heavy sleet showers")
-    condition="󰖘"
-    ;;
-"blowing snow" | "moderate or heavy sleet" | "patchy light snow" | "light snow" | "light snow showers")
-    condition="󰼶"
-    ;;
-"blizzard" | "patchy moderate snow" | "moderate snow" | "patchy heavy snow" | "heavy snow" | "moderate or heavy snow with thunder" | "moderate or heavy snow showers")
-    condition=""
-    ;;
-"thundery outbreaks possible" | "patchy light rain with thunder" | "moderate or heavy rain with thunder" | "patchy light snow with thunder")
-    condition=""
-    ;;
-*)
-    condition=""
-    echo -e "{\"text\":\""$condition"\", \"alt\":\""${weather[0]}"\", \"tooltip\":\""${weather[0]}: $temperature ${weather[1]}"\"}"
-    ;;
+waybar() {
+    refresh
+    if [ -z "$weather" ]; then
+        echo '{"text": " Offline", "tooltip": "Network connection unavailable."}'
+    else
+        tooltip="$(curl -s https://wttr.in/?format=\<b\>Condition:\</b\>+%C-\<b\>Temperature:\</b\>+%t\(%f\)-\<b\>Wind:\</b\>+%w | sed -e 's/-/\\n/g' -e 's/+//g')"
+        printf '{"text": "%s %s", "tooltip": "%s"}\n' "$icon" "$temperature" "$tooltip"
+    fi
+
+}
+
+case $1 in
+    xmobar) xmobar ;;
+    waybar) waybar ;;
+    *)
+        refresh
+        if [ -z "$weather" ]; then
+            printf '\033[01;31mERROR:\033[0m Check your network connection.\n'
+        else
+            printf '%s  %s\n' "$icon" "$temperature"
+        fi
+        ;;
 esac
-
-#echo $temp $condition
-
-echo -e "{\"text\":\""$temperature $condition  "\", \"alt\":\""${weather[0]}"\", \"tooltip\":\""${weather[0]}: $temperature ${weather[1]}"\"}"

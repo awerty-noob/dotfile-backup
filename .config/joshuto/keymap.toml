@@ -101,6 +101,7 @@ keymap = [
   { keys = ["m", "k"], command = ":mkdir " },
   { keys = ["c", "w"], command = ":rename " },
   { keys = ["c", "p"], command = "shell zip -r -q %s"},
+  { keys = ["c", "k"], command = "shell kdeconnect-handler %s"},
 
   { keys = ["/"], command = ":search_inc " },
   { keys = ["|"], command = ":search " },
@@ -120,12 +121,14 @@ keymap = [
 
   { keys = ["m", "s"], command = "linemode size" },
   { keys = ["m", "m"], command = "linemode mtime" },
-  { keys = ["m", "M"], command = "linemode sizemtime" },
+  # { keys = ["m", "M"], command = "linemode sizemtime" },
 
   { keys = ["g", "r"], command = "cd /" },
   { keys = ["g", "c"], command = "cd ~/.config" },
   { keys = ["g", "d"], command = "cd ~/Downloads" },
   { keys = ["g", "e"], command = "cd /etc" },
+  { keys = ["g", "o"], command = "cd ~/.local/share/osu-stable/Songs/" },
+  { keys = ["g", "m"], command = "cd /run/media/" },
   { keys = ["g", "h"], command = "cd ~/" },
   { keys = ["?"], command = "help" },
 ]

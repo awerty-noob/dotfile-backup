@@ -1,18 +1,18 @@
 {
     "label" : "lock",
-    "action" : "swaylock",
+    "action" : "swaylock -f",
     "text" : "Lock",
     "keybind" : "l"
 }
 {
     "label" : "hibernate",
-    "action" : "swaylock -f && systemctl hibernate",
+    "action" : "systemctl hibernate",
     "text" : "Hibernate",
     "keybind" : "h"
 }
 {
     "label" : "logout",
-    "action" : "loginctl terminate-user $USER",
+    "action" : "hyprctl dispatch exit",
     "text" : "Logout",
     "keybind" : "e"
 }
@@ -24,7 +24,7 @@
 }
 {
     "label" : "suspend",
-    "action" : "swaylock -f && systemctl suspend",
+    "action" : "systemctl suspend",
     "text" : "Suspend",
     "keybind" : "u"
 }
