@@ -24,7 +24,7 @@ text_default	= [
 ]
 
 reader_default	= [
-	{ command = "evince", fork = true, silent = true },
+	{ command = "zathura", fork = true, silent = true },
 ]
 
 libreoffice_default	= [
@@ -191,6 +191,10 @@ kdenlive.app_list = [
 
 torrent.app_list = [
 	{ command = "transmission-gtk" } ]
+
+xopp.app_list = [
+    { command = "xournalpp", fork = true, silent =true}
+]
 
 [mimetype]
 

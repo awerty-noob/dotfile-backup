@@ -34,14 +34,17 @@ zinit light zdharma/fast-syntax-highlighting
 zinit ice lucid wait='0' atload='_zsh_autosuggest_start'
 zinit light zsh-users/zsh-autosuggestions
 # 自动补全
-zinit ice lucid wait='0'
-zinit light zsh-users/zsh-completions
+# zinit ice lucid wait='0'
+# zinit light zsh-users/zsh-completions
 #history
 zinit ice lucid wait='1'
 zinit light zsh-users/zsh-history-substring-search
 #fzf
 zinit ice lucid wait='0'
 zinit light Aloxaf/fzf-tab
+#zoxide
+zi has'zoxide' light-mode for \
+  z-shell/zsh-zoxide
 #vim mode
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
@@ -49,12 +52,53 @@ zinit light jeffreytse/zsh-vi-mode
 zinit snippet OMZ::lib/completion.zsh
 zinit snippet OMZ::lib/history.zsh
 zinit snippet OMZ::lib/key-bindings.zsh
-
+PROMPT_EOL_MARK=''
 export PATH="$HOME/.local/bin:$PATH"
 export LANG=en_US.UTF-8
 export EDITOR="lvim"
 export GTK_THEME=Adwaita:dark
 
-alias ra="joshuto"
+function ra() {
+	ID="$$"
+	mkdir -p /tmp/$USER
+	OUTPUT_FILE="/tmp/$USER/joshuto-cwd-$ID"
+	env joshuto --output-file "$OUTPUT_FILE" $@
+	exit_code=$?
+
+	case "$exit_code" in
+		# regular exit
+		0)
+			;;
+		# output contains current directory
+		101)
+			JOSHUTO_CWD=$(cat "$OUTPUT_FILE")
+			cd "$JOSHUTO_CWD"
+			;;
+		# output selected files
+		102)
+			;;
+		*)
+			echo "Exit code: $exit_code"
+			;;
+	esac
+}
+
+function gend() {
+  if [[ $# -ne 1 || ! $1 =~ ^[0-9]+$ ]]; then
+    echo "Usage: gend <number>"
+    return 1
+  fi
+
+  local count=$1
+
+  for ((i = 1; i <= count; i++)); do
+    touch "testI$i.txt" "testO$i.txt"
+  done
+  echo "Created $count pairs of files."
+}
+
 alias bmt="bashmount"
+alias ccsg="ccs -s -w '/home/ralph/Repos/ICPC' -t '/home/ralph/Templates/sol.cpp'"
+alias parus="paru -Syu --batchinstall"
 alias lg="lazygit"
+
